@@ -293,7 +293,6 @@ SELECT
     m.normalised_content as content,
     m.sender,
     m.receiver,
-    m.participant,
     m.server_id,
     m.created_at,
     m.is_one_to_one,

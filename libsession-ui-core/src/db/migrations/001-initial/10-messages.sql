@@ -1,11 +1,12 @@
 CREATE TABLE messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    -- Where the message is stored remotely.
-    -- For your own messages, this is empty.
-    -- For group messages, this is the group session id (03xxx)
-    -- For community messages, this is the community id (url + room name) (http://server/room, https://server/room)
-    repository TEXT NOT NULL COLLATE NOCASE,
+    -- The type of group this message belongs to. NULL if this is not in a group.
+    group_type TEXT,
+    -- The id of the group this message belongs to. NULL if this is not in a group.
+    group_id TEXT,
+
+    FOREIGN KEY (group_type, group_id) REFERENCES config_user_groups(type, id) ON DELETE CASCADE,
 
     -- The server id of the message. This is used to identify the message on the server.
     -- For a swarm message (own or groups), this is a hash of the message content.
@@ -16,19 +17,16 @@ CREATE TABLE messages (
     content TEXT NOT NULL CHECK (json_valid(content)),
     content_text TEXT GENERATED ALWAYS AS (content ->> '$.dataMessage.body') VIRTUAL, -- The text content of the message. This is used for searching and displaying the message.
 
-    -- Sender of this message. It's set to empty if the message is sent by the "owner" of the repository.
-    -- For example, if the repository is empty
-    sender TEXT NOT NULL COLLATE NOCASE,
-    receiver TEXT NOT NULL COLLATE NOCASE,
+    sender TEXT NOT NULL CHECK(length(sender) > 0) COLLATE NOCASE,
+    receiver TEXT CHECK (receiver IS NULL OR length(receiver) > 0) COLLATE NOCASE,
+
     created_at TIMESTAMP NOT NULL,
     sent_at TIMESTAMP,
     expiration_at TIMESTAMP,
 
-    participant TEXT GENERATED ALWAYS AS (coalesce(nullif(sender, ''), receiver)) VIRTUAL, -- The participant of the message. This is the other party in a one-to-one conversation, or the sender in a group conversation.
-
-    is_one_to_one BOOLEAN GENERATED ALWAYS AS (repository = '') VIRTUAL , -- Whether this is a one-to-one conversation.
-    is_group BOOLEAN GENERATED ALWAYS AS (repository LIKE '03%') VIRTUAL, -- Whether this is a group conversation.
-    is_community BOOLEAN GENERATED ALWAYS AS (repository LIKE 'http://%' OR repository LIKE 'https://%') VIRTUAL, -- Whether this is a community conversation.
+    is_one_to_one BOOLEAN GENERATED ALWAYS AS (group_type IS NULL) VIRTUAL , -- Whether this is a one-to-one conversation.
+    is_group BOOLEAN GENERATED ALWAYS AS (group_type = 'group') VIRTUAL, -- Whether this is a group conversation.
+    is_community BOOLEAN GENERATED ALWAYS AS (group_type = 'community') VIRTUAL, -- Whether this is a community conversation.
 
     is_visible BOOLEAN GENERATED ALWAYS AS (
         -- Has text content
@@ -70,15 +68,15 @@ CREATE TABLE messages (
     receipt TEXT DEFAULT NULL CHECK (receipt IS NULL OR receipt IN ('DELIVERY', 'READ'))
 );
 
-CREATE UNIQUE INDEX messages_repo_hash ON messages(repository, server_id);
-CREATE INDEX messages_repo_created ON messages(repository, created_at);
-CREATE INDEX messages_repo_sender_receiver ON messages(repository, sender, receiver);
-CREATE INDEX messages_repo_sender_visible_created ON messages(repository, sender, is_visible, created_at);
-CREATE INDEX messages_repo_visible_created ON messages(repository, is_visible, created_at);
-CREATE INDEX messages_repo_sender ON messages(repository, sender);
-CREATE INDEX messages_repo_participant ON messages(repository, participant);
-CREATE INDEX messages_repo_participant_created ON messages(repository, participant, created_at);
-CREATE INDEX messages_repo_participant_visible_created ON messages(repository, participant, is_visible, created_at);
+CREATE UNIQUE INDEX messages_repo_hash ON messages(ifnull(group_type, ''), ifnull(group_id, ''), server_id);
+CREATE INDEX messages_repo_created ON messages(group_type, group_id, created_at);
+CREATE INDEX messages_repo_sender_receiver ON messages(group_type, group_id, sender, receiver);
+CREATE INDEX messages_repo_sender_visible_created ON messages(group_type, group_id, sender, is_visible, created_at);
+CREATE INDEX messages_repo_visible_created ON messages(group_type, group_id, is_visible, created_at);
+CREATE INDEX messages_repo_sender ON messages(group_type, group_id, sender);
+CREATE INDEX messages_repo_participant ON messages(group_type, group_id, participant);
+CREATE INDEX messages_repo_participant_created ON messages(group_type, group_id, participant, created_at);
+CREATE INDEX messages_repo_participant_visible_created ON messages(group_type, group_id, participant, is_visible, created_at);
 CREATE INDEX message_reaction_id ON messages(message_timestamp_reacted_to);
-CREATE INDEX message_send_status ON messages(repository, send_state);
-CREATE INDEX message_sync_state ON messages(repository, sync_state);
+CREATE INDEX message_send_status ON messages(group_type, group_id, send_state);
+CREATE INDEX message_sync_state ON messages(group_type, group_id, sync_state);
