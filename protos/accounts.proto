@@ -1,0 +1,49 @@
+syntax = "proto2";
+
+
+package SessionApp;
+option java_package= "dev.fanchao.session.protos";
+
+message ListAccountsRequest {
+}
+
+message ListAccountsResponse {
+  message Account {
+    required string session_id = 1;
+    required string name = 2;
+    optional bytes avatar_image = 3;
+  }
+
+  repeated Account accounts = 1;
+}
+
+// This message is used in the response to any login/auth requests
+message LoggedInResponse {
+  required string session_id = 1;
+}
+
+message CreateAccountRequest {
+  required string name = 1;
+  optional string db_password = 2;
+}
+
+message RestoreAccountRequest {
+  required string mnemonic = 1;
+  optional string db_password = 2;
+}
+
+// After this request, the endpoint port will be closed and any ongoing connections will be terminated.
+message LogoutRequest {
+  required string session_id = 1;
+}
+
+message LogoutResponse {
+}
+
+// After this request, the account and its file will be deleted and the endpoint port will be closed.
+message DeleteAccountRequest {
+  required string session_id = 1;
+}
+
+message DeleteAccountResponse {
+}

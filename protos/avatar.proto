@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package SessionApp;
+option java_package= "dev.fanchao.session.protos";
+
+import "protos/file.proto";
+import "google/protobuf/empty.proto";
+
+message Avatar {
+  oneof Image {
+    EncryptedFile image = 1;
+    CommunityFile community_image = 2;
+    google.protobuf.Empty empty = 3;
+  }
+  optional bool is_moderator = 4;
+  optional string fallback_text = 11;
+}
+
+message GroupMemberAvatarList {
+  repeated Avatar avatars = 1;
+}

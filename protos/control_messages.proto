@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+
+package SessionApp;
+option java_package = "dev.fanchao.session.protos";
+
+
+message ControlMessage {
+  oneof content {
+    bool message_approval_from_me = 2;
+    bool screenshot_taken_from_me = 3;
+    bool media_saved_from_me = 4;
+  }
+}

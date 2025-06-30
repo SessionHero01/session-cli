@@ -1,0 +1,44 @@
+syntax = "proto2";
+
+import "protos/avatar.proto";
+import "protos/message.proto";
+
+package SessionApp;
+option java_package = "dev.fanchao.session.protos";
+
+
+enum ConversationType {
+  GROUP = 0;
+  COMMUNITY = 1;
+  ONE_TO_ONE = 2;
+  NOTE_TO_SELF = 3;
+}
+
+message ConversationSummary {
+  required string id = 1;
+  required uint32 unread_count = 2;
+  required ConversationType type = 3;
+  required string name = 4;
+  oneof avatar {
+    GroupMemberAvatarList multiple_avatar = 5;
+    Avatar single_avatar = 6;
+  }
+  optional Message last_message = 7;
+  required bool approved = 8;
+  required bool mentioned_me = 9;
+}
+
+message ListConversationsRequest {
+  optional bool approved = 1;
+}
+
+message ListConversationsResponse {
+  repeated ConversationSummary conversations = 1;
+}
+
+message LoadMoreCommunityMessagesRequest {
+  required string community_id = 1;
+}
+
+message LoadMoreCommunityMessagesResponse {
+}

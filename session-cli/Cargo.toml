@@ -1,0 +1,23 @@
+[package]
+name = "session-cli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dirs = "5"
+tokio = { version = "1", features = ["macros"] }
+clap = { version = "4", features = ["derive", "env"] }
+futures-util = "0"
+tracing-subscriber = { version = "0", features = ["env-filter"] }
+tracing = "0"
+anyhow = "1"
+dotenvy = "0"
+url = "2"
+tempfile = "3"
+
+# For non-android platforms, enable quic flag in session-ui-core
+#[target.'cfg(not(target_os = "android"))'.dependencies]
+#session-ui-core = { path = "../libsession-ui-core", features = ["quic"] }
+#
+#[target.'cfg(target_os = "android")'.dependencies]
+session-ui-core = { path = "../libsession-ui-core" }

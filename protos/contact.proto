@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+import "protos/avatar.proto";
+
+package SessionApp;
+option java_package = "dev.fanchao.session.protos";
+
+message ContactItem {
+  required string id = 1;
+  required string name = 2;
+  required Avatar avatar = 3;
+}
+
+message ListContactsRequest {
+  optional string search_query = 1;
+}
+
+message ListContactsResponse {
+  repeated ContactItem contacts = 1;
+}

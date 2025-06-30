@@ -1,0 +1,11 @@
+[package]
+name = "session-util-sqlite"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+libsession_util_sys = { path = "../libsession-util-sys" }
+rusqlite = { version = "0", features = ["loadable_extension", "buildtime_bindgen", "functions", "vtab"] }

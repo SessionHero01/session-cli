@@ -1,0 +1,23 @@
+[package]
+name = "libsession_util_sys"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+link-cplusplus = "1"
+
+
+[build-dependencies]
+bindgen = "0"
+cmake = "0"
+glob = "0"
+
+[lib]
+crate-type = ["rlib"]
+
+#[features]
+#quic = []
+
+# non-Android only dependencies
+[target.'cfg(not(target_os = "android"))'.dependencies]
+#link-cplusplus = "1.0.9"

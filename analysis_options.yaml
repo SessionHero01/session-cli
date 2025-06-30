@@ -1,0 +1,7 @@
+# Use by Dart extension in VSCode to analyze the code and show warnings and errors.
+
+analyzer:
+  exclude:
+    - "libsession-ui/*"
+    - "libsession-util-sys/*"
+    - "session-cli/*"

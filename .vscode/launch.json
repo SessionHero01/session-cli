@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/flutter",
+            "env": {
+                "DISPLAY": ":1"
+            }
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Global server",
+            "program": "${workspaceFolder}/target/debug/session-cli",
+            "preLaunchTask": "build",
+            "sourceLanguages": [
+                "rust"
+            ],
+            "args": [
+                "run-global-server",
+                "-l",
+                "127.0.0.1:4002"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Account server",
+            "program": "${workspaceFolder}/target/debug/session-cli",
+            "sourceLanguages": [
+                "rust"
+            ],
+            "preLaunchTask": "build",
+            "args": [
+                "run-account-server",
+                "-l",
+                "127.0.0.1:4003"
+            ]
+        }
+    ]
+}

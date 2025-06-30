@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+import "protos/avatar.proto";
+//import "protos/file.proto";
+import "protos/message.proto";
+//import "protos/control_messages.proto";
+//import "google/protobuf/empty.proto";
+
+package SessionApp;
+option java_package = "dev.fanchao.session.protos";
+
+message ConversationDetails {
+  required string id = 1;
+  required string name = 2;
+  required int32 unread_count = 3;
+  oneof avatar {
+    Avatar single_avatar = 4;
+    GroupMemberAvatarList multiple_avatar = 5;
+  }
+  optional int32 active_community_members = 6;
+  optional int32 total_group_members = 7;
+  required bool can_post_text = 8;
+  required bool can_upload = 9;
+  required bool approved = 10;
+}
+
+
+message GetConversationDetailsRequest {
+  required string id = 1;
+}
+
+message GetConversationDetailsResponse {
+  optional ConversationDetails details = 1;
+}
+
+message GetConversationMessagesRequest {
+  required string id = 1;
+  optional uint64 until = 2;
+
+  oneof earlier {
+    uint32 limit = 3;
+    uint64 after = 4;
+  }
+}
+
+message GetConversationMessagesResponse {
+  repeated Message messages = 1;
+}

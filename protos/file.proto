@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package SessionApp;
+
+import "google/protobuf/empty.proto";
+
+message EncryptedFile {
+  required string url = 1;
+  required string key = 2;
+}
+
+message CommunityFile {
+  required string community_url = 1;
+  required int64 community_file_id = 2;
+}
+
+message TrimFileCacheRequest {
+  oneof keep {
+    google.protobuf.Empty keep_default = 1;
+    uint32 keep_days = 2;
+  }
+}
+
+message TrimFileCacheResponse {
+  required uint32 num_deleted = 1;
+}

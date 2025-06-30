@@ -1,0 +1,6 @@
+syntax = "proto2";
+
+package SessionApp;
+option java_package= "dev.fanchao.session.protos";
+
+

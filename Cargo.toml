@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+
+members = ["libsession-protos", "libsession-ui-core", "libsession-util-sys", "session-cli", "libsession-ui"]
+
+[profile.dev]
+opt-level = 0
+debug = true
+split-debuginfo = 'packed'  # optional, for smaller debug files
+
+
+[profile.release]
+strip = true
+panic = "abort"

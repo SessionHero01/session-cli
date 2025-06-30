@@ -1,0 +1,15 @@
+[package]
+name = "libsession_protos"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = "1"
+protobuf = "3"
+prost = "0"
+pbjson = "0"
+
+[build-dependencies]
+prost-build = "0.13.1"
+pbjson-build = "0.7.0"
+protoc-bin-vendored = "3.0.0"

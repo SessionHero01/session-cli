@@ -1,0 +1,131 @@
+syntax = "proto2";
+
+import "google/protobuf/empty.proto";
+import "protos/avatar.proto";
+import "protos/control_messages.proto";
+import "protos/file.proto";
+
+package SessionApp;
+option java_package = "dev.fanchao.session.protos";
+
+message UserName {
+  oneof name {
+    google.protobuf.Empty me = 1;
+    string other = 2;
+  }
+}
+
+message AttachmentContent {
+  oneof content {
+    EncryptedFile file = 1;
+    int64 pending_attachment_id = 2;
+    CommunityFile community_file = 3;
+  }
+}
+
+message AudioAttachment {
+  required AttachmentContent content = 1;
+  required uint64 duration_mills = 3;
+}
+
+message ImageAttachment {
+  required AttachmentContent content = 1;
+  optional uint32 width = 3;
+  optional uint32 height = 4;
+  optional bytes thumbnail = 5;
+}
+
+message ImageAttachments {
+  repeated ImageAttachment images = 1;
+}
+
+message VideoAttachment {
+  required AttachmentContent content = 1;
+  optional uint32 width = 3;
+  optional uint32 height = 4;
+  optional uint64 duration_mills = 5;
+  optional bytes thumbnail = 6;
+}
+
+message VideoAttachments {
+  repeated VideoAttachment videos = 1;
+}
+
+message FileAttachment {
+  required AttachmentContent content = 1;
+  optional string file_name = 3;
+  optional uint32 size = 4;
+  optional bytes thumbnail = 5;
+  optional string content_type = 6;
+}
+
+message FileAttachments {
+  repeated FileAttachment files = 1;
+}
+
+enum MessageDeleteState {
+  DELETED_LOCALLY = 1;
+  DELETED = 2;
+}
+
+message MessageContent {
+  message Full {
+    required string text = 1;
+
+    oneof attachments {
+      ImageAttachments images = 3;
+      VideoAttachments videos = 4;
+      FileAttachments files = 5;
+    }
+  }
+
+  oneof content {
+    string text = 1;
+    AudioAttachment voice = 2;
+    ImageAttachments images = 3;
+    VideoAttachments videos = 4;
+    FileAttachments files = 5;
+    Full full = 6;
+    MessageDeleteState deleted = 7;
+  }
+
+  map<string, UserName> mentions = 10;
+}
+
+message QuotedMessage {
+  required string id = 1;
+  required string author = 2;
+  required MessageContent content = 3;
+}
+
+message MessageReaction {
+  required string emoji = 1;
+  required uint32 count = 2;
+}
+
+enum MessageState {
+  SENDING = 1;
+  SENT = 2;
+  FAILED = 3;
+  READ = 4;
+}
+
+message RegularMessage {
+  required string author_id = 2;
+  required UserName author_name = 3;
+  required Avatar author_avatar = 4;
+  required MessageContent content = 7;
+  optional QuotedMessage quoted_message = 9;
+  optional MessageState state = 11;
+}
+
+message Message {
+  required string id = 1;
+  required uint64 created_at = 2;
+  repeated MessageReaction reactions = 3;
+
+  oneof body {
+    RegularMessage regular = 10;
+    ControlMessage control = 20;
+  }
+}

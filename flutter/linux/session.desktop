@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=Session
+Exec=session %u
+Icon=session
+Categories=Utility;

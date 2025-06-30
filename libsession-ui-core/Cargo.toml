@@ -1,0 +1,105 @@
+[package]
+name = "session-ui-core"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "session_ui_core"
+crate-type = ["rlib"]
+
+[dependencies]
+aes = "0.8.4"
+aes-gcm = "0.10.3"
+anyhow = "1"
+async-stream = "0"
+axum = { version = "0", features = ["multipart", "ws", "macros"] }
+axum-server = { version = "0", features = ["rustls"] }
+#axum-streams = { version = "0.18.0", features = ["json", "protobuf"] }
+base64 = "0"
+bytes = "1"
+cbc = "0"
+chrono = "0"
+cipher = "0"
+crc = "3"
+derive_more = { version = "1", features = ["full"] }
+futures-core = "0"
+futures-util = "0"
+hex = "0"
+hmac = "0"
+http = "1"
+http-body = "1"
+http-body-util = "0"
+include_dir = "0"
+indexmap = { version = "2", features = ["serde"] }
+itertools = "0"
+memmap2 = "0"
+num-traits = "0"
+num-derive = "0"
+paste = "1"
+pbjson = "0"
+pin-project-lite = "0"
+#progenitor = "0.7.0"
+prost = "0"
+# protobuf = "3.5.0"
+# protobuf-json-mapping = "3.5.0"
+rand = "0.8.5"
+reqwest = { version = "0", features = [
+    "json",
+    "stream",
+    "rustls-tls",
+], default-features = false }
+rusqlite = { version = "0", features = [
+    "trace",
+    "url",
+    "chrono",
+    "bundled-sqlcipher-vendored-openssl",
+    "rusqlite-macros",
+    "blob",
+    "preupdate_hook"
+], default-features = false }
+rusqlite_migration = { version = "1.3.1" }
+#scopeguard = "1.2.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = { package = "serde_json_path_to_error", version = "0.1" }
+serde_rusqlite = "0"
+serde_with = "3"
+sha2 = "0.10.8"
+strum = { version = "0", features = ["derive"] }
+tempfile = "3"
+thiserror = "2"
+tokio = { version = "1", features = [
+    "io-util",
+    "rt-multi-thread",
+    "macros",
+    "test-util",
+], default-features = false }
+tokio-stream = { version = "0", features = ["sync"] }
+tokio-util = "0"
+tower = { version = "0", features = ["log", "util"] }
+tracing = { version = "0", features = ["async-await", "log"] }
+#tokio-stream = { version = "0.1.15", features = ["sync"] }
+#tokio-util = "0.7.11"
+url = { version = "2", features = ["serde"] }
+libsession_protos = { path = "../libsession-protos" }
+libsession_util_sys = { path = "../libsession-util-sys" }
+parking_lot = "0"
+non-empty-string = { version = "0", features = ["serde"] }
+json-rpc-types = "1"
+mime = "0.3.17"
+regex = "1"
+infer = "0.16.0"
+uri = "0.4.0"
+tower-http = { version = "0.6.1", features = ["cors", "trace"] }
+libsimple = { version = "0.3.4", default-features = false }
+r2d2 = "0.8.10"
+r2d2_sqlite = "0.25.0"
+uuid = { version = "1.10.0", features = ["v4"] }
+smallvec = { version = "1.13.2", features = ["const_generics", "serde"] }
+serde_repr = "0"
+async-shutdown = "0"
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+#[features]
+#quic = ["libsession_util_sys/quic"]

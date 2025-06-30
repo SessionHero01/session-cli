@@ -1,0 +1,7 @@
+/target
+.env
+.idea
+/build
+cmake-*
+.DS_Store
+libsession-ui-core/*sqlite3db*
