@@ -58,8 +58,11 @@ CREATE TABLE config_user_groups (
     --- Group data
     is_kicked BOOLEAN,
 
+    --- Community data
+    server_pub_key TEXT,
+
     CONSTRAINT valid_group_data CHECK (type != 'group' OR (id LIKE '03%' AND is_kicked IS NOT NULL)),
-    CONSTRAINT valid_community_data CHECK (type != 'community' OR (id LIKE 'http://%' OR id LIKE 'https://%')),
+    CONSTRAINT valid_community_data CHECK (type != 'community' OR (id LIKE 'http://%' OR id LIKE 'https://%' AND server_pub_key IS NOT NULL)),
 
     PRIMARY KEY (id, type)
 ) WITHOUT ROWID;

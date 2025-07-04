@@ -14,8 +14,9 @@ WITH
     normalised_messages1 AS (
         SELECT
             CASE
-                -- For individual message, if the sender is empty then it's our message
-                WHEN m.is_one_to_one THEN m.sender = ''
+                WHEN m.is_one_to_one OR
+                     m.is_group OR
+                     (m.is_community AND !m.is_sender_blind) THEN m.sender = my.session_id
 
                 -- For communities, check if the sender is one of our blinded keys for this community
                 WHEN m.is_community THEN EXISTS (
@@ -23,9 +24,6 @@ WITH
                     FROM my_community_identities my
                     WHERE my.community_id = m.repository AND my.session_id = m.sender
                 )
-
-                -- For groups, check if sender equals to our public key
-                WHEN m.is_group THEN m.sender = my.session_id
 
                 ELSE false
                 END as from_me,

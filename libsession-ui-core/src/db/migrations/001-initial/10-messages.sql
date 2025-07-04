@@ -18,6 +18,8 @@ CREATE TABLE messages (
     content_text TEXT GENERATED ALWAYS AS (content ->> '$.dataMessage.body') VIRTUAL, -- The text content of the message. This is used for searching and displaying the message.
 
     sender TEXT NOT NULL CHECK(length(sender) > 0) COLLATE NOCASE,
+    is_sender_blind BOOLEAN GENERATED ALWAYS AS (sender LIKE '15%' OR sender LIKE '25%') VIRTUAL, -- Whether the sender is a blind identity.
+
     receiver TEXT CHECK (receiver IS NULL OR length(receiver) > 0) COLLATE NOCASE,
 
     created_at TIMESTAMP NOT NULL,
